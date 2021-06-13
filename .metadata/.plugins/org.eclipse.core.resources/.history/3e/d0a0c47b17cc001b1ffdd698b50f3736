@@ -1,0 +1,7 @@
+package xyz.elandasunshine.cvm;
+
+public class Cubeit {
+	
+	public static String projectId   = "cubeit";
+	public static String projectName = "Cubeit VM";
+}

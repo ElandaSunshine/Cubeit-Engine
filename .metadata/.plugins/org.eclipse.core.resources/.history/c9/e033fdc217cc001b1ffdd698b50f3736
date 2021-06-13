@@ -1,0 +1,12 @@
+package xyz.elandasunshine.cvm;
+
+public class Cubeit {
+	
+	//==================================================================================================================
+	public static String projectId      = "cubeitvm";
+	public static String projectName    = "Cubeit VM";
+	public static String projectVersion = "0.1.0";
+	public static String projectVendor  = "ElandaSunshine";
+	
+	//==================================================================================================================
+}
