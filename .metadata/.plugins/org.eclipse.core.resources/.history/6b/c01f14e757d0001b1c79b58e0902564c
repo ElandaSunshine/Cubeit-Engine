@@ -1,0 +1,7 @@
+package xyz.elandasunshine.cvm.init;
+
+import xyz.elandasunshine.capi.registry.Registry;
+
+public class ObjectRegister<T> extends Registry<Registry<T>> {
+
+}

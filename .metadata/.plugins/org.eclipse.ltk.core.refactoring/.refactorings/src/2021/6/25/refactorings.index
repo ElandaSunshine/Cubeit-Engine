@@ -3,3 +3,17 @@
 1623568892504	Delete element
 1623568894227	Delete element
 1623569068586	Rename package 'xyz.elandasunshine.ceapi'
+1623681504624	Rename type 'ICvmManager'
+1623683033017	Delete element
+1623683035389	Delete element
+1623683059855	Copy package
+1623683075232	Delete element
+1623696711241	Delete element
+1623761087272	Rename compilation unit 'IRegistry.java'
+1624035936365	Delete element
+1624038890168	Rename type 'ObjectRegister'
+1624098039167	Move compilation unit
+1624098057986	Rename type 'ITargetManager'
+1624101688244	Delete element
+1624106029752	Rename type 'IItemProvider'
+1624109922411	Delete element

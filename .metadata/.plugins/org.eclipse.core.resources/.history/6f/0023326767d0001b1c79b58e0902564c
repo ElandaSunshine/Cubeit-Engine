@@ -1,0 +1,13 @@
+package xyz.elandasunshine.capi.target;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import xyz.elandasunshine.cvm.ITargetManager;
+
+@Retention(RetentionPolicy.SOURCE)
+@Target
+public @interface TargetSide
+{
+	ITargetManager.VmTarget target;
+}

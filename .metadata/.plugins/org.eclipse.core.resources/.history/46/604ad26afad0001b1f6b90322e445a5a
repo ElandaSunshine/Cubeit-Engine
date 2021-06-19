@@ -1,0 +1,9 @@
+package xyz.elandasunshine.capi.block;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+
+public interface IItemProvider<T extends Block>
+{
+	default ItemBlock getItemBlockForBlock(T block) { return ItemBlock(); }
+}

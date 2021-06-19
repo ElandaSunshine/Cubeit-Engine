@@ -1,0 +1,54 @@
+/**
+    ===============================================================
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any internal version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <https://www.gnu.org/licenses/>.
+    
+    Copyright (c) 2021 ElandaSunshine
+    ===============================================================
+    
+    @author Elanda
+    @file   ICvmManager.java
+    @date   13, June 2021
+    
+    ===============================================================
+ */
+
+package xyz.elandasunshine.cvm;
+
+import org.apache.logging.log4j.Logger;
+
+public interface ICvmManager
+{
+	//==================================================================================================================
+	String projectId      = "cubeitvm";
+	String projectName    = "Cubeit VM";
+	String projectVersion = "0.1.0";
+	String projectVendor  = "ElandaSunshine";
+	
+	//==================================================================================================================
+	
+	
+	//==================================================================================================================
+	/** Setup resources and registers before the actual VM initialisation. */
+	void setup();
+	
+	/** Initialise the VM and register all the things needed to run it. */
+	void init();
+	
+	/** Anything that happens after VM initialisation can be done here. */
+	void load();
+	
+	//==================================================================================================================
+	/** The logger for this VM instance. */
+	Logger getLogger();
+	
+	
+}

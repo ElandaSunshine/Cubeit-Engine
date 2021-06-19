@@ -1,0 +1,11 @@
+package xyz.elandasunshine.cvm.init;
+
+import xyz.elandasunshine.capi.registry.Registry;
+
+public class ObjectRegister<T>
+{
+	public ObjectRegister()
+	{
+		super();
+	}
+}

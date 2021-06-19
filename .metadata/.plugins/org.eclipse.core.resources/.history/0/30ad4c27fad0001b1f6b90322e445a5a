@@ -1,0 +1,5 @@
+package xyz.elandasunshine.capi.block;
+
+public interface IItemProvider {
+
+}

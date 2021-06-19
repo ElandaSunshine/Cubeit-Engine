@@ -1,0 +1,40 @@
+package xyz.elandasunshine.cvm;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import xyz.elandasunshine.cvm.init.ObjectRegister;
+
+public class ClientManager implements ITargetManager
+{
+
+	@Override
+	public VmTarget getVmTarget()
+	{
+		return null;
+	}
+
+	@Override
+	public void setupVm(ObjectRegister register)
+	{
+		
+	}
+
+	@Override
+	public void initResources()
+	{
+		
+	}
+
+	@Override
+	public void loadResources()
+	{
+		
+	}
+
+	@Override
+	public Logger getLogger()
+	{
+		return LogManager.getLogger("CVM");
+	}
+}

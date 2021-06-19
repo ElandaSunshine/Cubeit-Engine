@@ -1,0 +1,19 @@
+package xyz.elandasunshine.cvm.init;
+
+
+public enum ObjectRegister
+{
+	SOUND_EVENT,
+	BLOCK,
+	POTION,
+	ENCHANTMENT,
+	ITEM,
+	POTION_TYPE,
+	ENTITY,
+	BIOME;
+	
+	ObjectRegister(Registry registry)
+	{
+		
+	}
+}

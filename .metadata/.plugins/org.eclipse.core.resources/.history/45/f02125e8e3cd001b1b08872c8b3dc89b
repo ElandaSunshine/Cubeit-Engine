@@ -1,0 +1,6 @@
+package xyz.elandasunshine.cvm;
+
+public class ClientManager implements ITargetManager
+{
+
+}

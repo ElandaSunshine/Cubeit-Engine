@@ -1,0 +1,32 @@
+package xyz.elandasunshine.cvm.init;
+
+import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionType;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.world.biome.Biome;
+import xyz.elandasunshine.capi.registry.Registry;
+
+public enum ObjectRegister
+{
+	SOUND_EVENT(new Registry<SoundEvent>()),
+	BLOCK      (new Registry<Block>()),
+	POTION     (new Registry<Potion>()),
+	ENCHANTMENT(new Registry<Enchantment>()),
+	ITEM       (new Registry<Item>()),
+	POTION_TYPE(new Registry<PotionType>()),
+	ENTITY     (new Registry<Entity>()),
+	BIOME      (new Registry<Biome>());
+	
+	//==================================================================================================================
+	Registry<?> registry;
+	
+	//==================================================================================================================
+	<T> ObjectRegister(Registry<T> parRegistry)
+	{
+		registry = parRegistry;
+	}
+}

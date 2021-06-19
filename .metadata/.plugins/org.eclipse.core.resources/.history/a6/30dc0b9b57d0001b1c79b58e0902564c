@@ -1,0 +1,5 @@
+package xyz.elandasunshine.cvm.init;
+
+public class ObjectRegister {
+
+}

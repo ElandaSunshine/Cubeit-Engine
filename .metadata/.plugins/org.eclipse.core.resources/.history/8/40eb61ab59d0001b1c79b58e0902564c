@@ -1,0 +1,23 @@
+package xyz.elandasunshine.cvm.init;
+
+import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionType;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.world.biome.Biome;
+import xyz.elandasunshine.capi.registry.Registry;
+
+public class ObjectRegister
+{
+	public Registry<SoundEvent>  soundEvents  = new Registry<SoundEvent>();
+	public Registry<Block>       blocks       = new Registry<Block>();
+	public Registry<Potion>      potions      = new Registry<Potion>();
+	public Registry<Enchantment> enchantments = new Registry<Enchantment>();
+	public Registry<Item>        itesm        = new Registry<Item>();
+	public Registry<PotionType>  potionTypes  = new Registry<PotionType>();
+	public Registry<Entity>      entities     = new Registry<Entity>();
+	public Registry<Biome>       biomes       = new Registry<Biome>();
+}

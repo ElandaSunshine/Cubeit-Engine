@@ -1,2 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="net.minecraft.client.Minecraft"/>
+    <fullyQualifiedTypeName name="org.apache.logging.log4j.Logger"/>
+    <fullyQualifiedTypeName name="net.minecraft.util.SoundEvent"/>
+    <fullyQualifiedTypeName name="net.minecraft.block.Block"/>
+    <fullyQualifiedTypeName name="net.minecraft.potion.Potion"/>
+    <fullyQualifiedTypeName name="net.minecraft.enchantment.Enchantment"/>
+    <fullyQualifiedTypeName name="net.minecraft.item.Item"/>
+    <fullyQualifiedTypeName name="net.minecraft.potion.PotionType"/>
+    <fullyQualifiedTypeName name="net.minecraft.entity.Entity"/>
+    <fullyQualifiedTypeName name="net.minecraft.world.biome.Biome"/>
+    <fullyQualifiedTypeName name="java.lang.reflect.Field"/>
+    <fullyQualifiedTypeName name="java.lang.Exception"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.cvm.init.ObjectRegister"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.registry.Registry"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.registry.Registry.KeyValuePair"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.registry.RegistryEntry"/>
+    <fullyQualifiedTypeName name="java.lang.annotation.Retention"/>
+    <fullyQualifiedTypeName name="java.lang.annotation.RetentionPolicy"/>
+    <fullyQualifiedTypeName name="java.lang.annotation.Target"/>
+    <fullyQualifiedTypeName name="java.lang.annotation.ElementType"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.cvm.ITargetManager.VmTarget"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.target.TargetSide"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.target.VmTarget"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.cvm.ITargetManager"/>
+</qualifiedTypeNameHistroy>

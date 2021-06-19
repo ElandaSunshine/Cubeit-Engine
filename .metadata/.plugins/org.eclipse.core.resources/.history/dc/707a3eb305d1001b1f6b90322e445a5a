@@ -1,0 +1,6 @@
+package xyz.elandasunshine.capi.misc;
+
+public interface IDispensable
+{
+
+}

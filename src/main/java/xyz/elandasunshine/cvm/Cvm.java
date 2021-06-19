@@ -23,11 +23,47 @@
 
 package xyz.elandasunshine.cvm;
 
+import org.apache.logging.log4j.Logger;
+
+import net.minecraft.client.Minecraft;
+import xyz.elandasunshine.cvm.init.ObjectRegistry;
+import xyz.elandasunshine.cvm.target.TargetManager;
+
 public class Cvm
-{	
+{
 	//==================================================================================================================
-	public static String projectId      = "cubeitvm";
-	public static String projectName    = "Cubeit VM";
-	public static String projectVersion = "0.1.0";
-	public static String projectVendor  = "ElandaSunshine";
+	private Minecraft      minecraft;
+	private TargetManager manager;
+	private Logger         logger;
+	
+	//==================================================================================================================
+	public Cvm(TargetManager parManager, Minecraft parMinecraft)
+	{
+		minecraft = parMinecraft;
+		manager   = parManager;
+		logger    = parManager.getLogger();
+	}
+	
+	//==================================================================================================================
+	/** Gets the VM's current target manager. */
+	public TargetManager getTargetManager() { return manager; }
+	
+	//==================================================================================================================	
+	/** Setup resources and registers before the actual VM initialisation. */
+	public void setup(ObjectRegistry registry)
+	{
+		manager.setupVm(registry);
+	}
+	
+	/** Initialise the VM and do everything after the registration. */
+	public void init()
+	{
+		manager.initResources();
+	}
+	
+	/** Anything that happens after VM initialisation can be done here. */
+	public void load()
+	{
+		manager.loadResources();
+	}
 }
