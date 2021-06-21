@@ -67,10 +67,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootTableList;
-import xyz.elandasunshine.capi.block.IItemBlockProvider;
-import xyz.elandasunshine.capi.misc.IDispensable;
-import xyz.elandasunshine.capi.registry.RegistryEntry;
-import xyz.elandasunshine.cvm.init.ObjectRegistry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -92,7 +88,7 @@ public class Bootstrap
         return alreadyRegistered;
     }
 
-    static void registerDispenserBehaviors(ObjectRegistry cubeitRegistry)
+    static void registerDispenserBehaviors()
     {
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(Items.ARROW, new BehaviorProjectileDispense()
         {
@@ -486,29 +482,6 @@ public class Bootstrap
             }
         });
         
-        for (final RegistryEntry<Item> entry : cubeitRegistry.items)
-        {
-        	final Item item = entry.getValue();
-
-        	if (item instanceof IDispensable)
-        	{
-        		final IDispensable dispensable = (IDispensable) item;
-        		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(item, dispensable.getBehaviour());
-        	}
-        }
-        
-        for (final RegistryEntry<Block> entry : cubeitRegistry.blocks)
-        {
-        	final Block block = entry.getValue();
-        	
-        	if (block instanceof IItemBlockProvider && block instanceof IDispensable)
-        	{
-        		final IDispensable dispensable = (IDispensable) block;
-        		final Item         itemBlock   = Item.getItemFromBlock(block);
-        		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(itemBlock, dispensable.getBehaviour());
-        	}
-        }
-        
         for (EnumDyeColor enumdyecolor : EnumDyeColor.values())
         {
             BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(Item.getItemFromBlock(BlockShulkerBox.func_190952_a(enumdyecolor)), new Bootstrap.BehaviorDispenseShulkerBox());
@@ -518,25 +491,26 @@ public class Bootstrap
     /**
      * Registers blocks, items, stats, etc.
      */
-    public static void register(ObjectRegistry cubeitRegistry)
+    public static void register()
     {
         if (!alreadyRegistered)
         {
             alreadyRegistered = true;
             
             redirectOutputToLog();
-            SoundEvent  .registerSounds      (cubeitRegistry);
-            Block       .registerBlocks      (cubeitRegistry);
-            BlockFire   .init                (cubeitRegistry);
-            Potion      .registerPotions     (cubeitRegistry);
-            Enchantment .registerEnchantments(cubeitRegistry);
-            Item        .registerItems       (cubeitRegistry);
-            PotionType  .registerPotionTypes (cubeitRegistry);
-            EntityList  .init                (cubeitRegistry);
-            Biome       .registerBiomes      (cubeitRegistry);
+            SoundEvent.registerSounds();
+            Block.registerBlocks();
+            BlockFire.init();
+            Potion.registerPotions();
+            Enchantment.registerEnchantments();
+            Item.registerItems();
+            PotionType.registerPotionTypes();
+            EntityList.init();
+            Biome.registerBiomes();
             PotionHelper.init();
-            registerDispenserBehaviors(cubeitRegistry);
-
+            registerDispenserBehaviors();
+            
+            
             if (!CraftingManager.func_193377_a())
             {
                 field_194219_b = true;

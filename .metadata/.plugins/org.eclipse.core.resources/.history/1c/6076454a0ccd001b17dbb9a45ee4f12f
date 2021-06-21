@@ -1,8 +1,0 @@
-package xyz.elandasunshine.cvm;
-
-public interface ICvmManager
-{
-    void setup();
-    void init();
-    void load();
-}

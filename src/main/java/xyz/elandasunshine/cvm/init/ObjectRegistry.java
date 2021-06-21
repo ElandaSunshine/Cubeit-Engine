@@ -1,5 +1,9 @@
 package xyz.elandasunshine.cvm.init;
 
+import java.util.Set;
+
+import com.google.common.collect.Sets;
+
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -57,6 +61,9 @@ public class ObjectRegistry
 	public static final int cubeitBiomeStartId       = 300;
 	
 	//==================================================================================================================
+	public final Set<String> registryNames = Sets.newHashSet();
+	
+	//==================================================================================================================
 	public final Registry<SoundEvent>  soundEvents  = new Registry<SoundEvent>();
 	public final Registry<Block>       blocks       = new Registry<Block>();
 	public final Registry<Potion>      potions      = new Registry<Potion>();
@@ -65,4 +72,19 @@ public class ObjectRegistry
 	public final Registry<PotionType>  potionTypes  = new Registry<PotionType>();
 	public final Registry<EntityDef>   entities     = new Registry<EntityDef>();
 	public final Registry<Biome>       biomes       = new Registry<Biome>();
+	
+	//==================================================================================================================
+	public void cleanRegistries()
+	{
+		registryNames.clear();
+		
+		soundEvents .clear();
+		blocks      .clear();
+		potions     .clear();
+		enchantments.clear();
+		items       .clear();
+		potionTypes .clear();
+		entities    .clear();
+		biomes      .clear();
+	}
 }

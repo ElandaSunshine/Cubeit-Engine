@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.RegistryNamespacedDefaultedByKey;
+import xyz.elandasunshine.capi.registry.Registry;
 import xyz.elandasunshine.capi.registry.RegistryEntry;
-import xyz.elandasunshine.cvm.init.ObjectRegistry;
 
 public class PotionType
 {
@@ -52,7 +52,7 @@ public class PotionType
         return this.effects;
     }
 
-    public static void registerPotionTypes(ObjectRegistry cubeitRegistry)
+    public static void registerPotionTypes()
     {
         registerPotionType("empty", new PotionType(new PotionEffect[0]));
         registerPotionType("water", new PotionType(new PotionEffect[0]));
@@ -91,10 +91,13 @@ public class PotionType
         registerPotionType("weakness", new PotionType(new PotionEffect[] {new PotionEffect(MobEffects.WEAKNESS, 1800)}));
         registerPotionType("long_weakness", new PotionType("weakness", new PotionEffect[] {new PotionEffect(MobEffects.WEAKNESS, 4800)}));
         registerPotionType("luck", new PotionType("luck", new PotionEffect[] {new PotionEffect(MobEffects.LUCK, 6000)}));
-        
-        for (final RegistryEntry<PotionType> type : cubeitRegistry.potionTypes)
+    }
+    
+    public static void registerCubeitPotionTypes(Registry<PotionType> registry)
+    {
+        for (final RegistryEntry<PotionType> type : registry)
         {
-        	registerPotionType(type.getKey(), type.getValue());
+        	registerPotionType("cubeit:" + type.getKey(), type.getValue());
         }
         
         REGISTRY.validateKey();

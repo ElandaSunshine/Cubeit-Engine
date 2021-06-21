@@ -583,7 +583,7 @@ public class Item
         return HashMultimap.<String, AttributeModifier>create();
     }
 
-    public static void registerItems(ObjectRegistry cubeitRegistry)
+    public static void registerItems()
     {
         registerItemBlock(Blocks.AIR, new ItemAir(Blocks.AIR));
         registerItemBlock(Blocks.STONE, (new ItemMultiTexture(Blocks.STONE, Blocks.STONE, new ItemMultiTexture.Mapper()
@@ -1100,8 +1100,12 @@ public class Item
         registerItem(2265, "record_ward", (new ItemRecord("ward", SoundEvents.RECORD_WARD)).setUnlocalizedName("record"));
         registerItem(2266, "record_11", (new ItemRecord("11", SoundEvents.RECORD_11)).setUnlocalizedName("record"));
         registerItem(2267, "record_wait", (new ItemRecord("wait", SoundEvents.RECORD_WAIT)).setUnlocalizedName("record"));
+    }
+    
+    public static void registerCubeitItems(ObjectRegistry registry)
+    {
         
-        final Registry<Block> blocks = cubeitRegistry.blocks;
+        final Registry<Block> blocks = registry.blocks;
         
         for (final RegistryEntry<Block> entry : blocks)
         {        	
@@ -1111,12 +1115,12 @@ public class Item
         	}
         }
         
-        final Registry<Item> items = cubeitRegistry.items;
+        final Registry<Item> items = registry.items;
         
         for (int i = 0; i < items.size(); ++i)
         {
         	final RegistryEntry<Item> entry = items.getEntryAt(i);
-        	registerItem(ObjectRegistry.cubeitItemStartId + i, entry.getKey(), entry.getValue());
+        	registerItem(ObjectRegistry.cubeitItemStartId + i, "cubeit:" + entry.getKey(), entry.getValue());
         }
     }
 

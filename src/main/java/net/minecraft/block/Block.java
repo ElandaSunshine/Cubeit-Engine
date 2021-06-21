@@ -1183,7 +1183,7 @@ public class Block
     {
     }
 
-    public static void registerBlocks(ObjectRegistry cubeitRegistry)
+    public static void registerBlocks()
     {
         registerBlock(0, AIR_ID, (new BlockAir()).setUnlocalizedName("air"));
         registerBlock(1, "stone", (new BlockStone()).setHardness(1.5F).setResistance(10.0F).setSoundType(SoundType.STONE).setUnlocalizedName("stone"));
@@ -1454,17 +1454,18 @@ public class Block
         registerBlock(251, "concrete", (new BlockColored(Material.ROCK)).setHardness(1.8F).setSoundType(SoundType.STONE).setUnlocalizedName("concrete"));
         registerBlock(252, "concrete_powder", (new BlockConcretePowder()).setHardness(0.5F).setSoundType(SoundType.SAND).setUnlocalizedName("concretePowder"));
         registerBlock(255, "structure_block", (new BlockStructure()).setBlockUnbreakable().setResistance(6000000.0F).setUnlocalizedName("structureBlock"));
-        
-        final Registry<Block> blockRegister = cubeitRegistry.blocks;
-        
-        for (int i = 0; i < blockRegister.size(); ++i)
+    }
+
+    public static void registerCubeitBlocks(Registry<Block> registry)
+    {        
+        for (int i = 0; i < registry.size(); ++i)
         {
-        	final RegistryEntry<Block> entry = blockRegister.getEntryAt(i);
-        	registerBlock(ObjectRegistry.cubeitBlockStartId + i, entry.getKey(), entry.getValue());
+        	final RegistryEntry<Block> entry = registry.getEntryAt(i);
+        	registerBlock(ObjectRegistry.cubeitBlockStartId + i, "cubeit:" + entry.getKey(), entry.getValue());
         }
         
         REGISTRY.validateKey();
-
+        
         for (Block block15 : REGISTRY)
         {
             if (block15.blockMaterial == Material.AIR)
@@ -1476,7 +1477,7 @@ public class Block
                 boolean flag = false;
                 boolean flag1 = block15 instanceof BlockStairs;
                 boolean flag2 = block15 instanceof BlockSlab;
-                boolean flag3 = block15 == block6 || block15 == block14;
+                boolean flag3 = block15 == Blocks.FARMLAND || block15 == Blocks.GRASS_PATH;
                 boolean flag4 = block15.translucent;
                 boolean flag5 = block15.lightOpacity == 0;
 
@@ -1514,7 +1515,7 @@ public class Block
             }
         }
     }
-
+    
     private static void registerBlock(int id, ResourceLocation textualID, Block block_)
     {
         REGISTRY.register(id, textualID, block_);

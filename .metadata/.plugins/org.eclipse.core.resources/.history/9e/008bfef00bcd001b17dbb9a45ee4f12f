@@ -1,6 +1,0 @@
-package xyz.elandasunshine.cvm;
-
-public interface ICvmManager
-{
-
-}

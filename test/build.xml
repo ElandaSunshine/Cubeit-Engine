@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project name="makeJar" default="main" basedir=".">
+    <!-- Sets variables which can later be used. -->
+    <!-- The value of a property is accessed via ${} -->
+    <property name="workspace.dir" location="../" />
+    <property name="src.dir"       location="src" />
+    <property name="build.dir"     location="obj" />
+    <property name="dist.dir"      location="bin/bin" />
+	
+	<path id="project.class.path">
+		<pathelement path="${workspace.dir}/src/obj" />
+		<pathelement path="${workspace.dir}/mcp/bin/minecraft" />
+	</path>
+		
+    <!-- Deletes the existing build, docs and dist directory-->
+    <target name="clean">
+        <delete dir="${build.dir}" />
+        <delete dir="${dist.dir}" />
+    </target>
+
+    <!-- Creates the  build, docs and dist directory-->
+    <target name="makedir">
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${dist.dir}" />
+    </target>
+
+    <!-- Compiles the java code (including the usage of library for JUnit -->
+    <target name="compile" depends="clean, makedir">
+        <javac srcdir="${src.dir}"
+        	   destdir="${build.dir}"
+        	   classpathref="project.class.path">
+       </javac>
+    </target>
+	
+    <!--Creates the deployable jar file  -->
+    <target name="make" depends="compile">
+        <jar destfile="${dist.dir}\data.jar" basedir="${build.dir}"></jar>
+    </target>
+
+    <target name="main" depends="compile, make">
+        <description>Main target</description>
+    </target>
+</project>

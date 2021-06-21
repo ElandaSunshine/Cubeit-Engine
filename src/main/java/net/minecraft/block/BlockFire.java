@@ -23,9 +23,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
-import xyz.elandasunshine.capi.block.IFlammable;
-import xyz.elandasunshine.capi.registry.RegistryEntry;
-import xyz.elandasunshine.cvm.init.ObjectRegistry;
 
 public class BlockFire extends Block
 {
@@ -54,7 +51,7 @@ public class BlockFire extends Block
         this.setTickRandomly(true);
     }
 
-    public static void init(ObjectRegistry cubeitRegistry)
+    public static void init()
     {
         Blocks.FIRE.setFireInfo(Blocks.PLANKS, 5, 20);
         Blocks.FIRE.setFireInfo(Blocks.DOUBLE_WOODEN_SLAB, 5, 20);
@@ -93,19 +90,8 @@ public class BlockFire extends Block
         Blocks.FIRE.setFireInfo(Blocks.COAL_BLOCK, 5, 5);
         Blocks.FIRE.setFireInfo(Blocks.HAY_BLOCK, 60, 20);
         Blocks.FIRE.setFireInfo(Blocks.CARPET, 60, 20);
-        
-        for (final RegistryEntry<Block> blockEntry : cubeitRegistry.blocks)
-        {
-        	final Block block = blockEntry.getValue();
-        	
-        	if (block instanceof IFlammable)
-        	{
-        		final IFlammable flammable = (IFlammable) block;
-        		Blocks.FIRE.setFireInfo(block, flammable.getEncouragement(), flammable.getFlammability());
-        	}
-        }
     }
-
+    
     public void setFireInfo(Block blockIn, int encouragement, int flammability)
     {
         this.encouragements.put(blockIn, Integer.valueOf(encouragement));

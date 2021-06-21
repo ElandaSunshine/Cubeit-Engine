@@ -260,7 +260,7 @@ public class EntityList
         return stringbuilder.toString();
     }
 
-    public static void init(ObjectRegistry cubeitRegistry)
+    public static void init()
     {
         func_191303_a(1, "item", EntityItem.class, "Item");
         func_191303_a(2, "xp_orb", EntityXPOrb.class, "XPOrb");
@@ -389,23 +389,25 @@ public class EntityList
         func_191305_a("zombie_pigman", 15373203, 5009705);
         func_191305_a("zombie_villager", 5651507, 7969893);
         field_191309_d.add(field_191307_a);
-        
-        final Registry<ObjectRegistry.EntityDef> entities = cubeitRegistry.entities;
-        
-        for (int i = 0; i < entities.size(); ++i)
+    }
+    
+    public static void initForCubeit(Registry<ObjectRegistry.EntityDef> registry)
+    {        
+        for (int i = 0; i < registry.size(); ++i)
         {
-        	final RegistryEntry<ObjectRegistry.EntityDef> entry = entities.getEntryAt(i);
+        	final RegistryEntry<ObjectRegistry.EntityDef> entry = registry.getEntryAt(i);
         	final ObjectRegistry.EntityDef                def   = entry.getValue();
-        	func_191303_a(ObjectRegistry.cubeitEntityStartId + i, entry.getKey(), def.entityClass, def.entityName);
+        	func_191303_a(ObjectRegistry.cubeitEntityStartId + i, "cubeit:" + entry.getKey(),
+        				  def.entityClass, def.entityName);
         	
         	if (def.entityEggColor != null)
         	{
         		final ObjectRegistry.EntityDef.EggColor egg = entry.getValue().entityEggColor;
-        		func_191305_a(entry.getKey(), egg.primaryEggColor, egg.secondaryEggColor);
+        		func_191305_a("cubeit:" + entry.getKey(), egg.primaryEggColor, egg.secondaryEggColor);
         	}
         }
     }
-
+    
     private static void func_191303_a(int p_191303_0_, String p_191303_1_, Class <? extends Entity > p_191303_2_, String p_191303_3_)
     {
         try

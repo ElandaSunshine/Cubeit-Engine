@@ -475,7 +475,7 @@ public abstract class Biome
     /**
      * Registers all of the vanilla biomes.
      */
-    public static void registerBiomes(ObjectRegistry cubeitRegistry)
+    public static void registerBiomes()
     {
         registerBiome(0, "ocean", new BiomeOcean((new Biome.BiomeProperties("Ocean")).setBaseHeight(-1.0F).setHeightVariation(0.1F)));
         registerBiome(1, "plains", new BiomePlains(false, (new Biome.BiomeProperties("Plains")).setBaseHeight(0.125F).setHeightVariation(0.05F).setTemperature(0.8F).setRainfall(0.4F)));
@@ -539,13 +539,14 @@ public abstract class Biome
         registerBiome(165, "mutated_mesa", new BiomeMesa(true, false, (new Biome.BiomeProperties("Mesa (Bryce)")).setBaseBiome("mesa").setTemperature(2.0F).setRainfall(0.0F).setRainDisabled()));
         registerBiome(166, "mutated_mesa_rock", new BiomeMesa(false, true, (new Biome.BiomeProperties("Mesa Plateau F M")).setBaseBiome("mesa_rock").setBaseHeight(0.45F).setHeightVariation(0.3F).setTemperature(2.0F).setRainfall(0.0F).setRainDisabled()));
         registerBiome(167, "mutated_mesa_clear_rock", new BiomeMesa(false, false, (new Biome.BiomeProperties("Mesa Plateau M")).setBaseBiome("mesa_clear_rock").setBaseHeight(0.45F).setHeightVariation(0.3F).setTemperature(2.0F).setRainfall(0.0F).setRainDisabled()));
+    }
     
-        final Registry<Biome> biomes = cubeitRegistry.biomes;
-        
-        for (int i = 0; i < biomes.size(); ++i)
+    public static void registerCubeitBiomes(Registry<Biome> registry)
+    {        
+        for (int i = 0; i < registry.size(); ++i)
         {
-        	final RegistryEntry<Biome> entry = biomes.getEntryAt(i);
-        	registerBiome(ObjectRegistry.cubeitBiomeStartId + i, entry.getKey(), entry.getValue());
+        	final RegistryEntry<Biome> entry = registry.getEntryAt(i);
+        	registerBiome(ObjectRegistry.cubeitBiomeStartId + i, "cubeit:" + entry.getKey(), entry.getValue());
         }
     }
 

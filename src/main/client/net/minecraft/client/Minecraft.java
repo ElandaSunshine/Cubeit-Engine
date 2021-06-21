@@ -198,9 +198,8 @@ import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
-import xyz.elandasunshine.cvm.ClientManager;
 import xyz.elandasunshine.cvm.Cvm;
-import xyz.elandasunshine.cvm.init.ObjectRegistry;
+import xyz.elandasunshine.cvm.client.ClientManager;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
@@ -229,7 +228,6 @@ public class Minecraft implements IThreadListener, ISnooperInfo
     public static byte[] memoryReserve = new byte[10485760];
     private static final List<DisplayMode> MAC_DISPLAY_MODES = Lists.newArrayList(new DisplayMode(2560, 1600), new DisplayMode(2880, 1800));
     private final File fileResourcepacks;
-    private final PropertyMap twitchDetails;
 
     /** The player's GameProfile properties */
     private final PropertyMap profileProperties;
@@ -245,7 +243,6 @@ public class Minecraft implements IThreadListener, ISnooperInfo
     private final DataFixer dataFixer;
     public PlayerControllerMP playerController;
     private boolean fullscreen;
-    private final boolean enableGLErrorChecking = true;
     private boolean hasCrashed;
 
     /** Instance of CrashReport. */
@@ -296,7 +293,7 @@ public class Minecraft implements IThreadListener, ISnooperInfo
     @Nullable
 
     /** Instance of IntegratedServer. */
-    private IntegratedServer theIntegratedServer;
+    private IntegratedServer theIntegratedServer = null;
     public GuiIngame ingameGUI;
 
     /** Skip render world */
@@ -311,7 +308,9 @@ public class Minecraft implements IThreadListener, ISnooperInfo
 
     /** Mouse helper instance. */
     public MouseHelper mouseHelper;
-    public final File mcDataDir;
+    public final File  mcDataDir;
+    public final File  gameDataDir;
+    
     private final File fileAssets;
     private final String launchedVersion;
     private final String versionType;
@@ -404,32 +403,37 @@ public class Minecraft implements IThreadListener, ISnooperInfo
 
     /** Profiler currently displayed in the debug screen pie chart */
     private String debugProfilerName = "root";
-
+    
     public Minecraft(GameConfiguration gameConfig)
     {    	
         theMinecraft = this;
-        this.mcDataDir = gameConfig.folderInfo.mcDataDir;
-        this.fileAssets = gameConfig.folderInfo.assetsDir;
+        
+        this.mcDataDir         = gameConfig.folderInfo.mcDataDir;
+        this.gameDataDir       = gameConfig.folderInfo.gameRootDir;
+        this.fileAssets        = gameConfig.folderInfo.assetsDir;
         this.fileResourcepacks = gameConfig.folderInfo.resourcePacksDir;
-        this.launchedVersion = gameConfig.gameInfo.version;
-        this.versionType = gameConfig.gameInfo.versionType;
-        this.twitchDetails = gameConfig.userInfo.userProperties;
+        this.launchedVersion   = gameConfig.gameInfo.version;
+        this.versionType       = gameConfig.gameInfo.versionType;
         this.profileProperties = gameConfig.userInfo.profileProperties;
+        this.session           = gameConfig.userInfo.session;
+        this.proxy             = gameConfig.userInfo.proxy == null ? Proxy.NO_PROXY : gameConfig.userInfo.proxy;
+        
+        this.sessionService        = (new YggdrasilAuthenticationService(this.proxy, UUID.randomUUID().toString()))
+        							          .createMinecraftSessionService();
         this.mcDefaultResourcePack = new DefaultResourcePack(gameConfig.folderInfo.getAssetsIndex());
-        this.proxy = gameConfig.userInfo.proxy == null ? Proxy.NO_PROXY : gameConfig.userInfo.proxy;
-        this.sessionService = (new YggdrasilAuthenticationService(this.proxy, UUID.randomUUID().toString())).createMinecraftSessionService();
-        this.session = gameConfig.userInfo.session;
-        LOGGER.info("Setting user: {}", (Object)this.session.getUsername());
-        LOGGER.debug("(Session ID is {})", (Object)this.session.getSessionID());
-        this.isDemo = gameConfig.gameInfo.isDemo;
-        this.displayWidth = gameConfig.displayInfo.width > 0 ? gameConfig.displayInfo.width : 1;
-        this.displayHeight = gameConfig.displayInfo.height > 0 ? gameConfig.displayInfo.height : 1;
-        this.tempDisplayWidth = gameConfig.displayInfo.width;
+        
+        LOGGER.info ("Setting user: {}",   (Object) this.session.getUsername());
+        LOGGER.debug("(Session ID is {})", (Object) this.session.getSessionID());
+        
+        this.isDemo            = gameConfig.gameInfo.isDemo;
+        this.displayWidth      = (gameConfig.displayInfo.width  > 0 ? gameConfig.displayInfo.width : 1);
+        this.displayHeight     = (gameConfig.displayInfo.height > 0 ? gameConfig.displayInfo.height : 1);
+        this.tempDisplayWidth  = gameConfig.displayInfo.width;
         this.tempDisplayHeight = gameConfig.displayInfo.height;
-        this.fullscreen = gameConfig.displayInfo.fullscreen;
+        this.fullscreen        = gameConfig.displayInfo.fullscreen;
+        
         this.jvm64bit = isJvm64bit();
-        this.theIntegratedServer = null;
-        this.cubeitVm = new Cvm(new ClientManager(), this);
+        this.cubeitVm = new Cvm(new ClientManager(this), gameDataDir);
         
         if (gameConfig.serverInfo.serverName != null)
         {
@@ -437,15 +441,15 @@ public class Minecraft implements IThreadListener, ISnooperInfo
             this.serverPort = gameConfig.serverInfo.serverPort;
         }
         
-        ImageIO.setUseCache(false);
-        Locale.setDefault(Locale.ROOT);
+        cubeitVm.setup();
         
-        ObjectRegistry objectRegistry = new ObjectRegistry();
-        cubeitVm.setup(objectRegistry);
-        Bootstrap.register(objectRegistry);
+        ImageIO  .setUseCache(false);
+        Locale   .setDefault(Locale.ROOT);
+        Bootstrap.register();
         
         TextComponentKeybind.field_193637_b = KeyBinding::func_193626_b;
-        this.dataFixer = DataFixesManager.createFixer();
+        
+        this.dataFixer       = DataFixesManager.createFixer();
         this.field_193034_aS = new GuiToast(this);
         this.field_193035_aW = new Tutorial(this);
     }
@@ -528,6 +532,7 @@ public class Minecraft implements IThreadListener, ISnooperInfo
         this.gameSettings = new GameSettings(this, this.mcDataDir);
         this.field_191950_u = new CreativeSettings(this, this.mcDataDir);
         this.defaultResourcePacks.add(this.mcDefaultResourcePack);
+        this.defaultResourcePacks.add(cubeitVm.getResourceFolder());
         this.startTimerHackThread();
 
         if (this.gameSettings.overrideHeight > 0 && this.gameSettings.overrideWidth > 0)
@@ -548,6 +553,9 @@ public class Minecraft implements IThreadListener, ISnooperInfo
         this.mcResourceManager = new SimpleReloadableResourceManager(this.metadataSerializer_);
         this.mcLanguageManager = new LanguageManager(this.metadataSerializer_, this.gameSettings.language);
         this.mcResourceManager.registerReloadListener(this.mcLanguageManager);
+        
+        this.cubeitVm.init();
+        
         this.refreshResources();
         this.renderEngine = new TextureManager(this.mcResourceManager);
         this.mcResourceManager.registerReloadListener(this.renderEngine);
@@ -609,7 +617,7 @@ public class Minecraft implements IThreadListener, ISnooperInfo
         this.effectRenderer = new ParticleManager(this.world, this.renderEngine);
         this.checkGLError("Post startup");
         this.ingameGUI = new GuiIngame(this);
-
+                
         if (this.serverName != null)
         {
             this.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), this, this.serverName, this.serverPort));
@@ -646,7 +654,11 @@ public class Minecraft implements IThreadListener, ISnooperInfo
     {
         SearchTree<ItemStack> searchtree = new SearchTree<ItemStack>((p_193988_0_) ->
         {
-            return (List)p_193988_0_.getTooltip((EntityPlayer)null, ITooltipFlag.TooltipFlags.NORMAL).stream().map(TextFormatting::getTextWithoutFormattingCodes).map(String::trim).filter((p_193984_0_) -> {
+            return (List<String>) p_193988_0_.getTooltip((EntityPlayer) null,
+            											 ITooltipFlag.TooltipFlags.NORMAL).stream()
+            														 .map(TextFormatting::getTextWithoutFormattingCodes)
+            														 .map(String::trim).filter((p_193984_0_) ->
+            {
                 return !p_193984_0_.isEmpty();
             }).collect(Collectors.toList());
         }, (p_193985_0_) ->
@@ -663,14 +675,19 @@ public class Minecraft implements IThreadListener, ISnooperInfo
         nonnulllist.forEach(searchtree::func_194043_a);
         SearchTree<RecipeList> searchtree1 = new SearchTree<RecipeList>((p_193990_0_) ->
         {
-            return (List)p_193990_0_.func_192711_b().stream().flatMap((p_193993_0_) -> {
-                return p_193993_0_.getRecipeOutput().getTooltip((EntityPlayer)null, ITooltipFlag.TooltipFlags.NORMAL).stream();
-            }).map(TextFormatting::getTextWithoutFormattingCodes).map(String::trim).filter((p_193994_0_) -> {
+            return (List<String>) p_193990_0_.func_192711_b().stream().flatMap((p_193993_0_) ->
+            {
+                return p_193993_0_.getRecipeOutput().getTooltip((EntityPlayer) null,
+                												ITooltipFlag.TooltipFlags.NORMAL).stream();
+            }).map(TextFormatting::getTextWithoutFormattingCodes).map(String::trim).filter((p_193994_0_) ->
+            {
                 return !p_193994_0_.isEmpty();
             }).collect(Collectors.toList());
-        }, (p_193991_0_) ->
+        },
+        (p_193991_0_) ->
         {
-            return (List)p_193991_0_.func_192711_b().stream().map((p_193992_0_) -> {
+            return (List<ResourceLocation>) p_193991_0_.func_192711_b().stream().map((p_193992_0_) ->
+            {
                 return Item.REGISTRY.getNameForObject(p_193992_0_.getRecipeOutput().getItem());
             }).collect(Collectors.toList());
         });
@@ -681,11 +698,11 @@ public class Minecraft implements IThreadListener, ISnooperInfo
 
     private void registerMetadataSerializers()
     {
-        this.metadataSerializer_.registerMetadataSectionType(new TextureMetadataSectionSerializer(), TextureMetadataSection.class);
-        this.metadataSerializer_.registerMetadataSectionType(new FontMetadataSectionSerializer(), FontMetadataSection.class);
+        this.metadataSerializer_.registerMetadataSectionType(new TextureMetadataSectionSerializer(),   TextureMetadataSection.class);
+        this.metadataSerializer_.registerMetadataSectionType(new FontMetadataSectionSerializer(),      FontMetadataSection.class);
         this.metadataSerializer_.registerMetadataSectionType(new AnimationMetadataSectionSerializer(), AnimationMetadataSection.class);
-        this.metadataSerializer_.registerMetadataSectionType(new PackMetadataSectionSerializer(), PackMetadataSection.class);
-        this.metadataSerializer_.registerMetadataSectionType(new LanguageMetadataSectionSerializer(), LanguageMetadataSection.class);
+        this.metadataSerializer_.registerMetadataSectionType(new PackMetadataSectionSerializer(),      PackMetadataSection.class);
+        this.metadataSerializer_.registerMetadataSectionType(new LanguageMetadataSectionSerializer(),  LanguageMetadataSection.class);
     }
 
     private void createDisplay() throws LWJGLException
@@ -940,7 +957,7 @@ public class Minecraft implements IThreadListener, ISnooperInfo
 
                 if (!flag)
                 {
-                    Iterator iterator = set.iterator();
+                    Iterator<DisplayMode> iterator = set.iterator();
                     DisplayMode displaymode3;
 
                     while (true)
@@ -1010,8 +1027,6 @@ public class Minecraft implements IThreadListener, ISnooperInfo
         bufferbuilder.pos(0.0D, 0.0D, 0.0D).tex(0.0D, 0.0D).color(255, 255, 255, 255).endVertex();
         tessellator.draw();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        int j = 256;
-        int k = 256;
         this.draw((scaledresolution.getScaledWidth() - 256) / 2, (scaledresolution.getScaledHeight() - 256) / 2, 0, 0, 256, 256, 255, 255, 255, 255);
         GlStateManager.disableLighting();
         GlStateManager.disableFog();
@@ -1029,8 +1044,6 @@ public class Minecraft implements IThreadListener, ISnooperInfo
     {
         BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        float f = 0.00390625F;
-        float f1 = 0.00390625F;
         bufferbuilder.pos((double)posX, (double)(posY + height), 0.0D).tex((double)((float)texU * 0.00390625F), (double)((float)(texV + height) * 0.00390625F)).color(red, green, blue, alpha).endVertex();
         bufferbuilder.pos((double)(posX + width), (double)(posY + height), 0.0D).tex((double)((float)(texU + width) * 0.00390625F), (double)((float)(texV + height) * 0.00390625F)).color(red, green, blue, alpha).endVertex();
         bufferbuilder.pos((double)(posX + width), (double)posY, 0.0D).tex((double)((float)(texU + width) * 0.00390625F), (double)((float)texV * 0.00390625F)).color(red, green, blue, alpha).endVertex();
@@ -1413,7 +1426,6 @@ public class Minecraft implements IThreadListener, ISnooperInfo
             GlStateManager.disableTexture2D();
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
-            int i = 160;
             int j = this.displayWidth - 160 - 10;
             int k = this.displayHeight - 320;
             GlStateManager.enableBlend();
@@ -1479,7 +1491,6 @@ public class Minecraft implements IThreadListener, ISnooperInfo
                 s = s + profiler$result.profilerName + ' ';
             }
 
-            int l2 = 16777215;
             this.fontRendererObj.drawStringWithShadow(s, (float)(j - 160), (float)(k - 80 - 16), 16777215);
             s = decimalformat.format(profiler$result.totalUsePercentage) + "%";
             this.fontRendererObj.drawStringWithShadow(s, (float)(j + 160 - this.fontRendererObj.getStringWidth(s)), (float)(k - 80 - 16), 16777215);
@@ -3061,7 +3072,8 @@ public class Minecraft implements IThreadListener, ISnooperInfo
         }
     }
 
-    public void addServerTypeToSnooper(Snooper playerSnooper)
+    @SuppressWarnings("deprecation")
+	public void addServerTypeToSnooper(Snooper playerSnooper)
     {
         playerSnooper.addStatToSnooper("opengl_version", GlStateManager.glGetString(7938));
         playerSnooper.addStatToSnooper("opengl_vendor", GlStateManager.glGetString(7936));

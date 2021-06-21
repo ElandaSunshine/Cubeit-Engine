@@ -364,7 +364,7 @@ public class Potion
         return this;
     }
 
-    public static void registerPotions(ObjectRegistry cubeitRegistry)
+    public static void registerPotions()
     {
         REGISTRY.register(1, new ResourceLocation("speed"), (new Potion(false, 8171462)).setPotionName("effect.moveSpeed").setIconIndex(0, 0).registerPotionAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, "91AEAA56-376B-4498-935B-2F7F68070635", 0.20000000298023224D, 2).setBeneficial());
         REGISTRY.register(2, new ResourceLocation("slowness"), (new Potion(true, 5926017)).setPotionName("effect.moveSlowdown").setIconIndex(1, 0).registerPotionAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, "7107DE5E-7CE8-4030-940E-514C1F160890", -0.15000000596046448D, 2));
@@ -393,14 +393,15 @@ public class Potion
         REGISTRY.register(25, new ResourceLocation("levitation"), (new Potion(true, 13565951)).setPotionName("effect.levitation").setIconIndex(3, 2));
         REGISTRY.register(26, new ResourceLocation("luck"), (new Potion(false, 3381504)).setPotionName("effect.luck").setIconIndex(5, 2).setBeneficial().registerPotionAttributeModifier(SharedMonsterAttributes.LUCK, "03C3C89D-7037-4B42-869F-B146BCB64D2E", 1.0D, 0));
         REGISTRY.register(27, new ResourceLocation("unluck"), (new Potion(true, 12624973)).setPotionName("effect.unluck").setIconIndex(6, 2).registerPotionAttributeModifier(SharedMonsterAttributes.LUCK, "CC5AF142-2BD2-4215-B636-2605AED11727", -1.0D, 0));
+    }
     
-        final Registry<Potion> potions = cubeitRegistry.potions;
-        
-        for (int i = 0; i < potions.size(); ++i)
+    public static void registerCubeitPotions(Registry<Potion> registry)
+    {        
+        for (int i = 0; i < registry.size(); ++i)
         {
-        	final RegistryEntry<Potion> potionEntry = potions.getEntryAt(i);
-        	REGISTRY.register(ObjectRegistry.cubeitPotionStartId + i, new ResourceLocation(potionEntry.getKey()),
-        					  potionEntry.getValue());
+        	final RegistryEntry<Potion> potionEntry = registry.getEntryAt(i);
+        	REGISTRY.register(ObjectRegistry.cubeitPotionStartId + i,
+        			          new ResourceLocation("cubeit", potionEntry.getKey()), potionEntry.getValue());
         }
     }
 }

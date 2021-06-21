@@ -225,7 +225,7 @@ public abstract class Enchantment
     /**
      * Registers all of the vanilla enchantments.
      */
-    public static void registerEnchantments(ObjectRegistry cubeitRegistry)
+    public static void registerEnchantments()
     {
         EntityEquipmentSlot[] aentityequipmentslot = new EntityEquipmentSlot[] {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
         REGISTRY.register(0, new ResourceLocation("protection"), new EnchantmentProtection(Enchantment.Rarity.COMMON, EnchantmentProtection.Type.ALL, aentityequipmentslot));
@@ -258,14 +258,15 @@ public abstract class Enchantment
         REGISTRY.register(62, new ResourceLocation("lure"), new EnchantmentFishingSpeed(Enchantment.Rarity.RARE, EnumEnchantmentType.FISHING_ROD, new EntityEquipmentSlot[] {EntityEquipmentSlot.MAINHAND}));
         REGISTRY.register(70, new ResourceLocation("mending"), new EnchantmentMending(Enchantment.Rarity.RARE, EntityEquipmentSlot.values()));
         REGISTRY.register(71, new ResourceLocation("vanishing_curse"), new EnchantmentVanishingCurse(Enchantment.Rarity.VERY_RARE, EntityEquipmentSlot.values()));
-        
-        final Registry<Enchantment> enchantments = cubeitRegistry.enchantments;
-        
-        for (int i = 0; i < enchantments.size(); ++i)
+    }
+    
+    public static void registerCubeitEnchantments(Registry<Enchantment> registry)
+    {        
+        for (int i = 0; i < registry.size(); ++i)
         {
-        	final RegistryEntry<Enchantment> enchantmentEntry = enchantments.getEntryAt(i);
+        	final RegistryEntry<Enchantment> entry = registry.getEntryAt(i);
         	REGISTRY.register(ObjectRegistry.cubeitEnchantmentStartId + i,
-        			          new ResourceLocation(enchantmentEntry.getKey()), enchantmentEntry.getValue());
+        			          new ResourceLocation("cubeit", entry.getKey()), entry.getValue());
         }
     }
 

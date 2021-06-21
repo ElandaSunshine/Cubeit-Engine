@@ -1,8 +1,8 @@
 package net.minecraft.util;
 
 import net.minecraft.util.registry.RegistryNamespaced;
+import xyz.elandasunshine.capi.registry.Registry;
 import xyz.elandasunshine.capi.registry.RegistryEntry;
-import xyz.elandasunshine.cvm.init.ObjectRegistry;
 
 public class SoundEvent
 {
@@ -20,7 +20,7 @@ public class SoundEvent
         return this.soundName;
     }
 
-    public static void registerSounds(ObjectRegistry cubeitRegistry)
+    public static void registerSounds()
     {
         registerSound("ambient.cave");
         registerSound("block.anvil.break");
@@ -571,22 +571,24 @@ public class SoundEvent
         registerSound("ui.toast.challenge_complete");
         registerSound("weather.rain");
         registerSound("weather.rain.above");
-        
-        // Initialising CubeIt entries
-        for (final RegistryEntry<SoundEvent> event : cubeitRegistry.soundEvents)
+    }
+
+    public static void registerCubeitSounds(Registry<SoundEvent> registry)
+    {
+    	for (final RegistryEntry<SoundEvent> entry : registry)
         {
-        	if (event.getValue() == null)
+        	if (entry.getValue() == null)
         	{
-        		registerSound(event.getKey());
+        		registerSound("cubeit:" + entry.getKey());
         	}
         	else
         	{
-        		final ResourceLocation resourcelocation = new ResourceLocation(event.getKey());
-        		REGISTRY.register(soundEventId++, resourcelocation, event.getValue());
+        		final ResourceLocation resourcelocation = new ResourceLocation("cubeit", entry.getKey());
+        		REGISTRY.register(soundEventId++, resourcelocation, entry.getValue());
         	}
         }
     }
-
+    
     private static void registerSound(String soundNameIn)
     {
         final ResourceLocation resourcelocation = new ResourceLocation(soundNameIn);
