@@ -8,13 +8,13 @@ public class InvalidRegistryNameException extends RuntimeException
 	private static final long serialVersionUID = -7592300124115614195L;
 
 	//==================================================================================================================
-	public static InvalidRegistryNameException createNullNameException(IRegisterable registerable)
+	public static InvalidRegistryNameException createNullNameException(final IRegisterable registerable)
 	{
 		return new InvalidRegistryNameException("The registry name for the object was not set: "
 												+ registerable.getClass().getSimpleName());
 	}
 	
-	public static InvalidRegistryNameException createDuplicateNameException(IRegisterable registerable)
+	public static InvalidRegistryNameException createDuplicateNameException(final IRegisterable registerable)
 	{
 		return new InvalidRegistryNameException("The name '" + registerable.getRegistryName() + "' of object '"
 												+ registerable.getClass().getSimpleName()
@@ -22,7 +22,7 @@ public class InvalidRegistryNameException extends RuntimeException
 	}
 	
 	//==================================================================================================================
-	private InvalidRegistryNameException(String message)
+	private InvalidRegistryNameException(final String message)
 	{
 		super(message);
 	}

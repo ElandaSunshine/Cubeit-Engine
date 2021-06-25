@@ -6,15 +6,21 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.jar.Manifest;
+
+import net.minecraft.util.Util;
 
 public class FileClassLoader implements Closeable
 {
 	//==================================================================================================================
-	private final File gameFile;
-	private URLClassLoader classLoader = null;
+	private static final char PATH_SEPERATOR = (Util.getOSType() == Util.EnumOS.WINDOWS ? '\\' : '/');
+	
+	//==================================================================================================================
+	private final File           gameFile;
+	private       URLClassLoader classLoader = null;
 
 	//==================================================================================================================
-	public FileClassLoader(File parGameFile) throws IOException
+	public FileClassLoader(final File parGameFile) throws IOException
 	{
 		this.gameFile = parGameFile;
 		
@@ -29,15 +35,22 @@ public class FileClassLoader implements Closeable
 	}
 	
 	//==================================================================================================================
-	public Class<?> loadClass(String name) throws ClassNotFoundException
+	public Class<?> loadClass(final String name) throws ClassNotFoundException
 	{
-		if (name.endsWith(".class"))
+		String classPath = name.replace(PATH_SEPERATOR, '.');
+		
+		if (classPath.endsWith(".class"))
 		{
-			name = name.substring(0, name.length() - ".class".length());
+			classPath = classPath.substring(0, classPath.length() - ".class".length());
 		}
 		
-		name = name.replace('/', '.');
-		return Class.forName(name, false, classLoader);
+		return Class.forName(classPath, false, classLoader);
+	}
+	
+	public Manifest getManifestFile() throws IOException
+	{
+		final URL mfUrl = classLoader.findResource("META-INF/MANIFEST.MF");
+		return new Manifest(mfUrl.openStream());
 	}
 	
 	//==================================================================================================================

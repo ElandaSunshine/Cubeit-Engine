@@ -48,6 +48,8 @@ import net.minecraft.util.registry.RegistryNamespacedDefaultedByKey;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import xyz.elandasunshine.capi.block.GameBlock;
+import xyz.elandasunshine.capi.game.GameInfo;
 import xyz.elandasunshine.capi.registry.Registry;
 import xyz.elandasunshine.capi.registry.RegistryEntry;
 import xyz.elandasunshine.capi.target.TargetSide;
@@ -1456,12 +1458,13 @@ public class Block
         registerBlock(255, "structure_block", (new BlockStructure()).setBlockUnbreakable().setResistance(6000000.0F).setUnlocalizedName("structureBlock"));
     }
 
-    public static void registerCubeitBlocks(Registry<Block> registry)
+    public static void registerCubeitBlocks(Registry<GameBlock> registry)
     {        
         for (int i = 0; i < registry.size(); ++i)
         {
-        	final RegistryEntry<Block> entry = registry.getEntryAt(i);
-        	registerBlock(ObjectRegistry.cubeitBlockStartId + i, "cubeit:" + entry.getKey(), entry.getValue());
+        	final RegistryEntry<GameBlock> entry = registry.getEntryAt(i);
+        	registerBlock(ObjectRegistry.cubeitBlockStartId + i,
+        			      GameInfo.get().gameId + ":" + entry.getKey(), entry.getValue());
         }
         
         REGISTRY.validateKey();

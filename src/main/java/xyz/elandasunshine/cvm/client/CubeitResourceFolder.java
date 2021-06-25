@@ -1,89 +1,119 @@
 package xyz.elandasunshine.cvm.client;
 
-import java.io.BufferedInputStream;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.CharMatcher;
+import org.apache.commons.io.IOUtils;
+
 import com.google.common.collect.ImmutableSet;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 
-import net.minecraft.client.resources.AbstractResourcePack;
-import net.minecraft.client.resources.ResourcePackFileNotFoundException;
-import net.minecraft.util.Util;
+import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.client.resources.data.IMetadataSection;
+import net.minecraft.client.resources.data.MetadataSerializer;
+import net.minecraft.util.ResourceLocation;
+import xyz.elandasunshine.capi.game.GameInfo;
 
-public class CubeitResourceFolder extends AbstractResourcePack
-{
-    private static final boolean field_191386_b = Util.getOSType() == Util.EnumOS.WINDOWS;
-    private static final CharMatcher field_191387_c = CharMatcher.is('\\');
-
-    public CubeitResourceFolder(File resourcePackFileIn)
+public class CubeitResourceFolder implements IResourcePack
+{   
+	//==================================================================================================================
+	private static <T extends IMetadataSection> T readMetadata(MetadataSerializer metadataSerializer,
+															   InputStream        inputStream,
+															   String             sectionName)
+	{
+		JsonObject     jsonobject     = null;
+		BufferedReader bufferedreader = null;
+		
+		try
+		{
+			bufferedreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+			jsonobject     = (new JsonParser()).parse(bufferedreader).getAsJsonObject();
+		}
+		catch (RuntimeException runtimeexception)
+		{
+			throw new JsonParseException(runtimeexception);
+		}
+		finally
+		{
+			IOUtils.closeQuietly((Reader)bufferedreader);
+		}
+		
+		return metadataSerializer.<T>parseMetadataSection(sectionName, jsonobject);
+	}
+	
+	//==================================================================================================================
+	private final File assetsFolder;
+	
+	//==================================================================================================================
+    public CubeitResourceFolder(final File parAssetsFolder)
     {
-        super(resourcePackFileIn);
+        this.assetsFolder = parAssetsFolder;
     }
 
-    protected static boolean func_191384_a(File p_191384_0_, String p_191384_1_) throws IOException
+	//==================================================================================================================
+    @Override
+    public boolean resourceExists(ResourceLocation location)
     {
-        String s = p_191384_0_.getCanonicalPath();
-
-        if (field_191386_b)
-        {
-            s = field_191387_c.replaceFrom(s, '/');
-        }
-
-        return s.endsWith(p_191384_1_);
-    }
-
-    protected InputStream getInputStreamByName(String name) throws IOException
-    {
-        File file1 = this.func_191385_d(name.substring(6));
-
-        if (file1 == null)
-        {
-            throw new ResourcePackFileNotFoundException(this.resourcePackFile, name);
-        }
-        else
-        {
-            return new BufferedInputStream(new FileInputStream(file1));
-        }
-    }
-
-    protected boolean hasResourceName(String name)
-    {
-        return this.func_191385_d(name.substring(6)) != null;
+        return getFileFromLocation(location).exists();
     }
 
     @Nullable
-    private File func_191385_d(String p_191385_1_)
+    @Override
+    public <T extends IMetadataSection> T getPackMetadata(final MetadataSerializer metadataSerializer,
+    													  final String metadataSectionName) throws IOException
     {
         try
         {
-            File file1 = new File(this.resourcePackFile, p_191385_1_);
-
-            if (file1.isFile() && func_191384_a(file1, p_191385_1_))
-            {
-                return file1;
-            }
+            final InputStream inputstream = new FileInputStream(new File(assetsFolder, "assets.info"));
+            return readMetadata(metadataSerializer, inputstream, metadataSectionName);
         }
-        catch (IOException var3)
-        {
-            ;
-        }
-
-        return null;
+        catch (final Exception ex) {}
+        return (T) null;
     }
 
-    public Set<String> getResourceDomains()
+	//==================================================================================================================
+    @Override
+    public InputStream getInputStream(ResourceLocation location) throws IOException
     {
-        return ImmutableSet.of("cubeit");
+        final InputStream stream = this.getInputStreamAssets(location);
+
+        if (stream != null)
+        {
+            return stream;
+        }
+        else
+        {
+            throw new FileNotFoundException(location.getResourcePath());
+        }
     }
     
-    public String getPackName()
+    @Override public Set<String>   getResourceDomains()              { return ImmutableSet.of(GameInfo.get().gameId); }
+    @Override public BufferedImage getPackImage() throws IOException { return null; }
+    @Override public String        getPackName()                     { return GameInfo.get().gameName; }
+    
+	//==================================================================================================================
+    @Nullable
+    public InputStream getInputStreamAssets(ResourceLocation location) throws IOException, FileNotFoundException
     {
-        return "Cubeit Default";
+        final File file = getFileFromLocation(location);
+        return file != null && file.isFile() ? new FileInputStream(file) : null;
+    }
+    
+    private File getFileFromLocation(ResourceLocation location)
+    {
+    	return new File(assetsFolder, location.getResourceDomain() + "/" + location.getResourcePath());
     }
 }

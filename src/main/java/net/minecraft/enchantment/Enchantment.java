@@ -12,6 +12,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.RegistryNamespaced;
 import net.minecraft.util.text.TextFormatting;
+import xyz.elandasunshine.capi.game.GameInfo;
 import xyz.elandasunshine.capi.registry.Registry;
 import xyz.elandasunshine.capi.registry.RegistryEntry;
 import xyz.elandasunshine.cvm.init.ObjectRegistry;
@@ -266,7 +267,7 @@ public abstract class Enchantment
         {
         	final RegistryEntry<Enchantment> entry = registry.getEntryAt(i);
         	REGISTRY.register(ObjectRegistry.cubeitEnchantmentStartId + i,
-        			          new ResourceLocation("cubeit", entry.getKey()), entry.getValue());
+        			          new ResourceLocation(GameInfo.get().gameId, entry.getKey()), entry.getValue());
         }
     }
 

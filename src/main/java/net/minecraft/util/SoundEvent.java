@@ -1,6 +1,7 @@
 package net.minecraft.util;
 
 import net.minecraft.util.registry.RegistryNamespaced;
+import xyz.elandasunshine.capi.game.GameInfo;
 import xyz.elandasunshine.capi.registry.Registry;
 import xyz.elandasunshine.capi.registry.RegistryEntry;
 
@@ -583,7 +584,7 @@ public class SoundEvent
         	}
         	else
         	{
-        		final ResourceLocation resourcelocation = new ResourceLocation("cubeit", entry.getKey());
+        		final ResourceLocation resourcelocation = new ResourceLocation(GameInfo.get().gameId, entry.getKey());
         		REGISTRY.register(soundEventId++, resourcelocation, entry.getValue());
         	}
         }

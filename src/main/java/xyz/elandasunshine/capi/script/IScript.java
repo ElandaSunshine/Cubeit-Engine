@@ -2,5 +2,5 @@ package xyz.elandasunshine.capi.script;
 
 public interface IScript
 {
-	void execute(Class<?> sender);
+	void execute(final Class<?> sender);
 }

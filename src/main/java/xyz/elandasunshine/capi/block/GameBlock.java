@@ -3,6 +3,7 @@ package xyz.elandasunshine.capi.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemBlock;
 import xyz.elandasunshine.capi.registry.IRegisterable;
 
 public abstract class GameBlock extends Block implements IRegisterable
@@ -11,16 +12,27 @@ public abstract class GameBlock extends Block implements IRegisterable
 	private String registryName;
 
 	//==================================================================================================================
-	public GameBlock(String registryName, Material material)
-	{
-		super(material);
-		this.registryName = registryName;
-	}
-	
-	protected GameBlock(String registryName, Material material, MapColor mapColor)
+	protected GameBlock(final String registryName, final Material material, final MapColor mapColor)
 	{
 		super(material, mapColor);
 		this.registryName = registryName;
+		this.setUnlocalizedName(registryName);
+	}
+	
+	public GameBlock(final String registryName, final Material material)
+	{
+		this(registryName, material, material.getMaterialMapColor());
+	}
+	
+	//==================================================================================================================
+	public int[] getModelVariants()
+	{
+		return null;
+	}
+	
+	public ItemBlock getItemBlock()
+	{
+		return null;
 	}
 	
 	//==================================================================================================================
@@ -28,5 +40,5 @@ public abstract class GameBlock extends Block implements IRegisterable
 	public String getRegistryName()
 	{
 		return registryName;
-	}
+	}	
 }

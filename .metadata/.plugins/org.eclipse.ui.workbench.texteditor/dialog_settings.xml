@@ -4,16 +4,18 @@
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="twitchDetails"/>
+		<item key="selection" value="Registry"/>
+		<item key="wrap" value="true"/>
+		<item key="incremental" value="false"/>
 		<list key="findhistory">
+			<item value="modelManager"/>
+			<item value="init"/>
+			<item value="DIRT"/>
 			<item value="comparingBy"/>
 			<item value="enableGLErrorChecking"/>
 			<item value="twitchDetails"/>
-			<item value="modelManager"/>
-			<item value="DIRT"/>
 			<item value="hasResourceName"/>
 			<item value="mc"/>
-			<item value="mcResourcePackRepository"/>
 		</list>
 		<list key="replacehistory">
 			<item value="String"/>
@@ -22,5 +24,12 @@
 	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
 		<item key="DIALOG_X_ORIGIN" value="1044"/>
 		<item key="DIALOG_Y_ORIGIN" value="549"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="1107"/>
+		<item key="DIALOG_Y_ORIGIN" value="418"/>
+		<item key="DIALOG_WIDTH" value="346"/>
+		<item key="DIALOG_HEIGHT" value="395"/>
+		<item key="DIALOG_FONT_NAME" value="1|Noto Sans|10.0|0|GTK|1|"/>
 	</section>
 </section>

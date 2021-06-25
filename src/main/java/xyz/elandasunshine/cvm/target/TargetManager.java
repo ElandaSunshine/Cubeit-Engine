@@ -26,6 +26,7 @@ package xyz.elandasunshine.cvm.target;
 import org.apache.logging.log4j.Logger;
 
 import xyz.elandasunshine.capi.target.VmTarget;
+import xyz.elandasunshine.cvm.init.ObjectRegistry;
 
 /**
  *  The ICvmManager interface is the base
@@ -46,7 +47,7 @@ public abstract class TargetManager
 	private static TargetManager INSTANCE = null;
 	
 	//==================================================================================================================
-	protected void init(TargetManager managerType)
+	protected void init(final TargetManager managerType)
 	{
 		if (INSTANCE == null)
 		{
@@ -69,11 +70,11 @@ public abstract class TargetManager
 	
 	//==================================================================================================================
 	/** Setup resources and registers before the actual VM initialisation. */
-	public abstract void setupVm();
+	public abstract void preInit(final ObjectRegistry registry);
 	
 	/** Initialise the VM and register all the things needed to run it. */
-	public abstract void initResources();
+	public abstract void init(final ObjectRegistry registry);
 	
 	/** Anything that happens after VM initialisation can be done here. */
-	public abstract void loadResources();	
+	public abstract void load(final ObjectRegistry registry);	
 }

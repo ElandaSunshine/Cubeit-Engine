@@ -45,6 +45,7 @@ import net.minecraft.world.gen.feature.WorldGenSwamp;
 import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenTrees;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import xyz.elandasunshine.capi.game.GameInfo;
 import xyz.elandasunshine.capi.registry.Registry;
 import xyz.elandasunshine.capi.registry.RegistryEntry;
 import xyz.elandasunshine.capi.target.TargetSide;
@@ -546,7 +547,8 @@ public abstract class Biome
         for (int i = 0; i < registry.size(); ++i)
         {
         	final RegistryEntry<Biome> entry = registry.getEntryAt(i);
-        	registerBiome(ObjectRegistry.cubeitBiomeStartId + i, "cubeit:" + entry.getKey(), entry.getValue());
+        	registerBiome(ObjectRegistry.cubeitBiomeStartId + i, GameInfo.get().gameId + ":" + entry.getKey(),
+        			      entry.getValue());
         }
     }
 

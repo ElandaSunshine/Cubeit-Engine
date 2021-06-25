@@ -17,7 +17,7 @@ public class ScriptRegistry
 	private final Map<Class<? extends IScript>, List<Class<?>>> scripts = Maps.newHashMap();
 	
 	//==================================================================================================================
-	public void findAndRegisterScripts(List<Class<?>> classList) throws Exception
+	public void findAndRegisterScripts(final List<Class<?>> classList) throws Exception
 	{
 		for (final Class<?> clazz : classList)
 		{
@@ -47,7 +47,7 @@ public class ScriptRegistry
 		return new ConstMap<>(scripts);
 	}
 	
-	public ConstList<Class<?>> getClassesForScript(Class<? extends IScript> scriptType)
+	public ConstList<Class<?>> getClassesForScript(final Class<? extends IScript> scriptType)
 	{
 		return new ConstList<>(scripts.get(scriptType));
 	}

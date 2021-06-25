@@ -54,7 +54,9 @@ import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.registry.RegistryNamespaced;
 import net.minecraft.util.registry.RegistrySimple;
 import net.minecraft.world.World;
-import xyz.elandasunshine.capi.block.IItemBlockProvider;
+import xyz.elandasunshine.capi.block.GameBlock;
+import xyz.elandasunshine.capi.game.GameInfo;
+import xyz.elandasunshine.capi.item.GameItem;
 import xyz.elandasunshine.capi.registry.Registry;
 import xyz.elandasunshine.capi.registry.RegistryEntry;
 import xyz.elandasunshine.capi.target.TargetSide;
@@ -1104,34 +1106,26 @@ public class Item
     
     public static void registerCubeitItems(ObjectRegistry registry)
     {
-        
-        final Registry<Block> blocks = registry.blocks;
-        
-        for (final RegistryEntry<Block> entry : blocks)
-        {        	
-        	if (entry.getValue() instanceof IItemBlockProvider)
+        final Registry<GameBlock> blocks = registry.blocks;
+        final Registry<GameItem>  items  = registry.items;
+
+        for (final RegistryEntry<GameBlock> entry : blocks)
+        {
+        	final GameBlock block     = entry.getValue();
+        	final ItemBlock itemBlock = block.getItemBlock();
+        	
+        	if (itemBlock != null)
         	{
-        		registerItemBlockProvider((IItemBlockProvider) entry.getValue());
+        		registerItemBlock(block, itemBlock);
         	}
         }
         
-        final Registry<Item> items = registry.items;
-        
         for (int i = 0; i < items.size(); ++i)
         {
-        	final RegistryEntry<Item> entry = items.getEntryAt(i);
-        	registerItem(ObjectRegistry.cubeitItemStartId + i, "cubeit:" + entry.getKey(), entry.getValue());
+        	final RegistryEntry<GameItem> entry = items.getEntryAt(i);
+        	registerItem(ObjectRegistry.cubeitItemStartId + i, GameInfo.get().gameId + ":" + entry.getKey(),
+        			     entry.getValue());
         }
-    }
-
-    private static void registerItemBlockProvider(IItemBlockProvider provider)
-    {
-    	final Block     block     = (Block) provider;
-    	final int       id        = ObjectRegistry.cubeitItemBlockStartId + Block.getIdFromBlock(block);
-    	final ItemBlock itemBlock = provider.getItemBlockForBlock() != null ? provider.getItemBlockForBlock()
-    								           							    : new ItemBlock(block);
-    	registerItem(id, Block.REGISTRY.getNameForObject(block), itemBlock);
-    	BLOCK_TO_ITEM.put(block, itemBlock);
     }
     
     /**

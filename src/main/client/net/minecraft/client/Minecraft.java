@@ -441,7 +441,7 @@ public class Minecraft implements IThreadListener, ISnooperInfo
             this.serverPort = gameConfig.serverInfo.serverPort;
         }
         
-        cubeitVm.setup();
+        cubeitVm.initialiseVm();
         
         ImageIO  .setUseCache(false);
         Locale   .setDefault(Locale.ROOT);
@@ -554,7 +554,7 @@ public class Minecraft implements IThreadListener, ISnooperInfo
         this.mcLanguageManager = new LanguageManager(this.metadataSerializer_, this.gameSettings.language);
         this.mcResourceManager.registerReloadListener(this.mcLanguageManager);
         
-        this.cubeitVm.init();
+        this.cubeitVm.setup();
         
         this.refreshResources();
         this.renderEngine = new TextureManager(this.mcResourceManager);
@@ -615,6 +615,9 @@ public class Minecraft implements IThreadListener, ISnooperInfo
         this.mcResourceManager.registerReloadListener(this.field_193995_ae);
         GlStateManager.viewport(0, 0, this.displayWidth, this.displayHeight);
         this.effectRenderer = new ParticleManager(this.world, this.renderEngine);
+        
+        this.cubeitVm.load();
+        
         this.checkGLError("Post startup");
         this.ingameGUI = new GuiIngame(this);
                 

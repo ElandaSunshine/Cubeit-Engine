@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="net.minecraft.world.storage.loot.LootContext.EntityTarget"/>
-    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.script.ScriptBase"/>
-    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.script.register.Register"/>
-    <fullyQualifiedTypeName name="xyz.elandasunshine.cvm.exception.GameNotFoundException"/>
-    <fullyQualifiedTypeName name="net.minecraft.client.main.GameConfiguration"/>
-    <fullyQualifiedTypeName name="net.minecraft.client.main.GameConfiguration.UserInformation"/>
-    <fullyQualifiedTypeName name="net.minecraft.client.Minecraft"/>
-    <fullyQualifiedTypeName name="net.minecraft.util.ResourceLocation"/>
-    <fullyQualifiedTypeName name="net.minecraft.block.Block"/>
-    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.registry.exception.InvalidRegistryNameException"/>
-    <fullyQualifiedTypeName name="java.lang.Object"/>
-    <fullyQualifiedTypeName name="java.util.Enumeration"/>
-    <fullyQualifiedTypeName name="java.util.jar.JarEntry"/>
-    <fullyQualifiedTypeName name="java.io.File"/>
-    <fullyQualifiedTypeName name="java.lang.Class"/>
-    <fullyQualifiedTypeName name="com.google.common.collect.Sets"/>
-    <fullyQualifiedTypeName name="xyz.elandasunshine.cvm.loader.ScriptLoader"/>
-    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.block.GameBlock"/>
-    <fullyQualifiedTypeName name="java.util.Set"/>
     <fullyQualifiedTypeName name="xyz.elandasunshine.capi.script.CgsRegister"/>
-    <fullyQualifiedTypeName name="xyz.elandasunshine.cvm.init.ObjectRegistry"/>
     <fullyQualifiedTypeName name="java.lang.Exception"/>
     <fullyQualifiedTypeName name="com.google.common.collect.Multiset"/>
     <fullyQualifiedTypeName name="java.util.Map.Entry"/>
@@ -50,7 +30,6 @@
     <fullyQualifiedTypeName name="xyz.elandasunshine.capi.script.IScript"/>
     <fullyQualifiedTypeName name="com.google.common.collect.Lists"/>
     <fullyQualifiedTypeName name="java.util.Map"/>
-    <fullyQualifiedTypeName name="java.lang.Override"/>
     <fullyQualifiedTypeName name="xyz.elandasunshine.cvm.util.constant.ConstMap"/>
     <fullyQualifiedTypeName name="xyz.elandasunshine.cvm.game.GameClassList"/>
     <fullyQualifiedTypeName name="java.lang.RuntimeException"/>
@@ -59,5 +38,26 @@
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="xyz.elandasunshine.cvm.util.constant.ConstList"/>
     <fullyQualifiedTypeName name="xyz.elandasunshine.capi.script.cgs.CgsRegister"/>
+    <fullyQualifiedTypeName name="net.minecraft.item.Item"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.item.GameItem"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.block.GameBlock"/>
+    <fullyQualifiedTypeName name="net.minecraft.client.renderer.BlockModelShapes"/>
+    <fullyQualifiedTypeName name="net.minecraft.client.renderer.block.statemap.StateMap"/>
+    <fullyQualifiedTypeName name="net.minecraft.client.renderer.block.statemap.StateMap.Builder"/>
+    <fullyQualifiedTypeName name="net.minecraft.client.resources.IResourcePack"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.cvm.client.CubeitResourceFolder"/>
+    <fullyQualifiedTypeName name="com.google.common.base.CharMatcher"/>
+    <fullyQualifiedTypeName name="net.minecraft.client.resources.ResourceIndex"/>
+    <fullyQualifiedTypeName name="com.google.common.collect.ImmutableSet"/>
+    <fullyQualifiedTypeName name="java.lang.Override"/>
+    <fullyQualifiedTypeName name="java.io.FileInputStream"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.game.GameInfo"/>
+    <fullyQualifiedTypeName name="net.minecraft.util.ResourceLocation"/>
+    <fullyQualifiedTypeName name="net.minecraft.init.Blocks"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.cvm.init.ObjectRegistry"/>
+    <fullyQualifiedTypeName name="net.minecraft.creativetab.CreativeTabs"/>
+    <fullyQualifiedTypeName name="net.minecraft.block.BlockEmptyDrops"/>
     <fullyQualifiedTypeName name="xyz.elandasunshine.capi.block.IItemBlockProvider"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="xyz.elandasunshine.capi.registry.RegistryEntry"/>
 </qualifiedTypeNameHistroy>

@@ -10,17 +10,17 @@ public final class Registry<T> implements Iterable<RegistryEntry<T>>
 	//==================================================================================================================
 	private class RegistryIterator implements Iterator<RegistryEntry<T>>
 	{
-		Registry<T> registry;
-		int index = 0;
+		private final Registry<T> registry;
+		private       int         index = 0;
 		
 		//==============================================================================================================
-		public RegistryIterator(Registry<T> parRegistry) { registry = parRegistry; }
+		public RegistryIterator(final Registry<T> parRegistry) { registry = parRegistry; }
 		
 		//==============================================================================================================
 		@Override
 		public boolean hasNext()
 		{
-			return index < (registry.size() - 1);
+			return index < registry.size();
 		}
 
 		@Override
@@ -35,17 +35,17 @@ public final class Registry<T> implements Iterable<RegistryEntry<T>>
 	private ArrayList<RegistryEntry<T>> elements;
 	
 	//==================================================================================================================
-	public Registry()             { elements = Lists.newArrayList(); }
-	public Registry(int capacity) { elements = Lists.newArrayListWithCapacity(capacity); }
+	public Registry()                   { elements = Lists.newArrayList(); }
+	public Registry(final int capacity) { elements = Lists.newArrayListWithCapacity(capacity); }
 	
 	@SafeVarargs
-	public Registry(RegistryEntry<T> ...parElements)
+	public Registry(final RegistryEntry<T> ...parElements)
 	{
 		elements = Lists.newArrayList(parElements);
 	}
 	
 	//==================================================================================================================
-	public boolean register(String id, T element)
+	public boolean register(final String id, final T element)
 	{
 		if (contains(id) || contains(element))
 		{
@@ -57,11 +57,11 @@ public final class Registry<T> implements Iterable<RegistryEntry<T>>
 	}
 	
 	//==================================================================================================================
-	public T                getElementAt(int index) { return elements.get(index).getValue(); }
-	public String           getIdAt     (int index) { return elements.get(index).getKey(); }
-	public RegistryEntry<T> getEntryAt  (int index) { return elements.get(index); }
+	public T                getElementAt(final int index) { return elements.get(index).getValue(); }
+	public String           getIdAt     (final int index) { return elements.get(index).getKey(); }
+	public RegistryEntry<T> getEntryAt  (final int index) { return elements.get(index); }
 	
-	public T get(String id)
+	public T get(final String id)
 	{
 		for (final RegistryEntry<T> entry : elements)
 		{
@@ -74,7 +74,7 @@ public final class Registry<T> implements Iterable<RegistryEntry<T>>
 		return null;
 	}
 	
-	public String get(T element)
+	public String get(final T element)
 	{
 		for (final RegistryEntry<T> entry : elements)
 		{
@@ -94,7 +94,7 @@ public final class Registry<T> implements Iterable<RegistryEntry<T>>
 	public int size() { return elements.size(); }
 	
 	//==================================================================================================================
-	public int indexOf(String id)
+	public int indexOf(final String id)
 	{
 		for (int i = 0; i < elements.size(); ++i)
 		{			
@@ -107,7 +107,7 @@ public final class Registry<T> implements Iterable<RegistryEntry<T>>
 		return -1;
 	}
 	
-	public int indexOf(T element)
+	public int indexOf(final T element)
 	{
 		for (int i = 0; i < elements.size(); ++i)
 		{			
@@ -121,8 +121,8 @@ public final class Registry<T> implements Iterable<RegistryEntry<T>>
 	}
 	
 	//==================================================================================================================
-	public boolean contains(String id) { return indexOf(id)      >= 0; }
-	public boolean contains(T element)           { return indexOf(element) >= 0; }
+	public boolean contains(final String id) { return indexOf(id)      >= 0; }
+	public boolean contains(final T element) { return indexOf(element) >= 0; }
 	
 	//==================================================================================================================
 	public boolean isEmpty() { return elements.isEmpty(); }

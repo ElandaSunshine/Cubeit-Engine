@@ -97,6 +97,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.RegistryNamespaced;
 import net.minecraft.world.World;
+import xyz.elandasunshine.capi.game.GameInfo;
 import xyz.elandasunshine.capi.registry.Registry;
 import xyz.elandasunshine.capi.registry.RegistryEntry;
 import xyz.elandasunshine.capi.target.TargetSide;
@@ -397,13 +398,14 @@ public class EntityList
         {
         	final RegistryEntry<ObjectRegistry.EntityDef> entry = registry.getEntryAt(i);
         	final ObjectRegistry.EntityDef                def   = entry.getValue();
-        	func_191303_a(ObjectRegistry.cubeitEntityStartId + i, "cubeit:" + entry.getKey(),
+        	func_191303_a(ObjectRegistry.cubeitEntityStartId + i, GameInfo.get().gameId + ":" + entry.getKey(),
         				  def.entityClass, def.entityName);
         	
         	if (def.entityEggColor != null)
         	{
         		final ObjectRegistry.EntityDef.EggColor egg = entry.getValue().entityEggColor;
-        		func_191305_a("cubeit:" + entry.getKey(), egg.primaryEggColor, egg.secondaryEggColor);
+        		func_191305_a(GameInfo.get().gameId + ":"  + entry.getKey(), egg.primaryEggColor,
+        				      egg.secondaryEggColor);
         	}
         }
     }

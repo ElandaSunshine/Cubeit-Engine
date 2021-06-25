@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.RegistryNamespacedDefaultedByKey;
+import xyz.elandasunshine.capi.game.GameInfo;
 import xyz.elandasunshine.capi.registry.Registry;
 import xyz.elandasunshine.capi.registry.RegistryEntry;
 
@@ -97,7 +98,7 @@ public class PotionType
     {
         for (final RegistryEntry<PotionType> type : registry)
         {
-        	registerPotionType("cubeit:" + type.getKey(), type.getValue());
+        	registerPotionType(GameInfo.get().gameId + ":" + type.getKey(), type.getValue());
         }
         
         REGISTRY.validateKey();

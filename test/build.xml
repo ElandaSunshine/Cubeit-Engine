@@ -34,7 +34,22 @@
 	
     <!--Creates the deployable jar file  -->
     <target name="make" depends="compile">
-        <jar destfile="${dist.dir}\data.jar" basedir="${build.dir}"></jar>
+        <jar destfile="${dist.dir}\data.jar" basedir="${build.dir}">
+        	<manifest>
+        		<section name="game">
+	        		<attribute name="Game-Id"      value="test"/>
+	        		<attribute name="Game-Name"    value="Test Game" />
+	        		<attribute name="Game-Version" value="1.0.0" />
+	        		<attribute name="Game-Authors" value="Elanda,Mia" />
+	        		<attribute name="Game-Url"     value="https://elandasunshine.xyz"/>
+        		</section>
+        		<section name="loader">
+        			<attribute name="Load-Protocol" value="native" />
+        			<attribute name="Data-Binary"   value="" />
+        			<attribute name="Class-Root"    value="xyz.elandasunshine.test" />
+        		</section>
+        	</manifest>
+        </jar>
     </target>
 
     <target name="main" depends="compile, make">

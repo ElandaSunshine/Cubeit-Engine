@@ -52,8 +52,6 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
-import xyz.elandasunshine.cvm.Cvm;
-import xyz.elandasunshine.cvm.init.ObjectRegistry;
 
 public class BlockModelShapes
 {

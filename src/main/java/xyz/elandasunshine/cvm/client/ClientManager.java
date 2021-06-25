@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.client.Minecraft;
 import xyz.elandasunshine.capi.target.TargetSide;
 import xyz.elandasunshine.capi.target.VmTarget;
+import xyz.elandasunshine.cvm.init.ObjectRegistry;
 import xyz.elandasunshine.cvm.target.TargetManager;
 
 @TargetSide(VmTarget.CLIENT)
@@ -16,7 +17,7 @@ public class ClientManager extends TargetManager
 	private final Minecraft minecraft;
 	
 	//==================================================================================================================
-	public ClientManager(Minecraft parMinecraft)
+	public ClientManager(final Minecraft parMinecraft)
 	{
 		this.minecraft = parMinecraft;
 		init(this);
@@ -31,20 +32,19 @@ public class ClientManager extends TargetManager
 	
 	//==================================================================================================================
 	@Override
-	public void setupVm()
+	public void preInit(final ObjectRegistry registry)
 	{
 		
 	}
 
 	@Override
-	public void initResources()
+	public void init(final ObjectRegistry registry)
 	{
-		
 	}
 
 	@Override
-	public void loadResources()
+	public void load(final ObjectRegistry registry)
 	{
-		
+		minecraft.getRenderItem().registerCubeitItems(registry);
 	}
 }

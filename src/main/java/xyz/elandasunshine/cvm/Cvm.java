@@ -24,6 +24,8 @@
 package xyz.elandasunshine.cvm;
 
 import java.io.File;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 import org.apache.logging.log4j.Logger;
 
@@ -38,14 +40,17 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.biome.Biome;
+import xyz.elandasunshine.capi.block.GameBlock;
 import xyz.elandasunshine.capi.block.IFlammable;
-import xyz.elandasunshine.capi.block.IItemBlockProvider;
+import xyz.elandasunshine.capi.game.GameInfo;
+import xyz.elandasunshine.capi.item.GameItem;
 import xyz.elandasunshine.capi.misc.IDispensable;
 import xyz.elandasunshine.capi.registry.RegistryEntry;
 import xyz.elandasunshine.capi.script.cgs.CgsRegister;
 import xyz.elandasunshine.capi.target.TargetSide;
 import xyz.elandasunshine.capi.target.VmTarget;
 import xyz.elandasunshine.cvm.client.CubeitResourceFolder;
+import xyz.elandasunshine.cvm.exception.InvalidGameManifestException;
 import xyz.elandasunshine.cvm.game.GameClassList;
 import xyz.elandasunshine.cvm.init.ObjectRegistry;
 import xyz.elandasunshine.cvm.init.ScriptRegistry;
@@ -68,7 +73,7 @@ public class Cvm
 	private final ScriptRegistry scriptRegistry = new ScriptRegistry();
 	
 	//==================================================================================================================
-	public Cvm(TargetManager parManager, File parDirGameRoot)
+	public Cvm(final TargetManager parManager, final File parDirGameRoot)
 	{
 		this.manager   = parManager;
 		this.logger    = parManager.getLogger();
@@ -81,33 +86,52 @@ public class Cvm
 	}
 	
 	//==================================================================================================================	
-	public void setup()
+	public void initialiseVm()
 	{
+		logger.info("Setting up CubeIt VM");
+		
 		try
 		{
 			this.classList.findClasses();
-			this.scriptRegistry.findAndRegisterScripts(this.classList.getClasses().getMutableList());
+			this.scriptRegistry.findAndRegisterScripts(this.classList.getClasses());
+			
+			final GameInfo info = createGameInfo();
+			logger.info("Loading game: " + info.gameName + " (" + info.gameId + "); Version: " + info.gameVersion);
+		}
+		catch (final RuntimeException ex)
+		{
+			throw ex;
 		}
 		catch (final Exception ex)
 		{
 			throw new RuntimeException(ex);
 		}
+	}
+	
+	//==================================================================================================================	
+	public void setup()
+	{
+		manager.preInit(registry);
 		
-		manager.setupVm();
+		logger.info("Registering game objects...");
+		registerObjects();
+		
+		logger.info("Injecting game objects into the Minecraft kernel...");
+		injectObjects();
+		
+		init();
 	}
 	
 	public void init()
 	{
-		registerObjects();
-		injectObjects();
-		manager.initResources();
+		manager.init(registry);
 	}
 	
 	public void load()
 	{
-		manager.loadResources();
+		manager.load(registry);
+		registry.cleanRegistries();
 	}
-	
 	
 	//==================================================================================================================
 	@TargetSide(VmTarget.CLIENT)
@@ -117,8 +141,43 @@ public class Cvm
 	}
 	
 	//==================================================================================================================
-	private void registerObjects()
+	private GameInfo createGameInfo()
 	{
+		final Manifest   metaInf = classList.getManifest();
+		final Attributes atts    = metaInf.getAttributes("game");
+		
+		if (atts == null)
+		{
+			throw new InvalidGameManifestException("Game could not be loaded because no details were found.");
+		}
+		
+		// Required
+		final String gameId      = atts.getValue("Game-Id");
+		final String gameVersion = atts.getValue("Game-Version");
+		
+		if (gameId == null)
+		{
+			throw new InvalidGameManifestException("Game could not be loaded "
+												   + "because of the missing game id declaration.");
+		}
+		
+		if (gameVersion == null)
+		{
+			throw new InvalidGameManifestException("Game could not be loaded "
+												   + "because of the missing game version declaration.");
+		}
+		
+		// Optional
+		final String gameName    = atts.getValue("Game-Name");
+		final String gameAuthors = atts.getValue("Game-Authors");
+		final String gameUrl     = atts.getValue("Game-Url");
+		
+		return new GameInfo(gameId, gameVersion, (gameName == null ? "Unknown" : gameName), gameUrl,
+				            (gameAuthors == null ? new String[] { "Unspecified" } : gameAuthors.split(",")));
+	}
+	
+	private void registerObjects()
+	{		
 		final ConstList<Class<?>> registryList = this.scriptRegistry.getClassesForScript(CgsRegister.class);
 		
 		if (!registryList.isEmpty())
@@ -137,7 +196,7 @@ public class Cvm
 		SoundEvent.registerCubeitSounds(registry.soundEvents);
         Block     .registerCubeitBlocks(registry.blocks);
         
-        for (final RegistryEntry<Block> blockEntry : registry.blocks)
+        for (final RegistryEntry<GameBlock> blockEntry : registry.blocks)
         {
         	final Block block = blockEntry.getValue();
         	
@@ -155,9 +214,9 @@ public class Cvm
         EntityList .initForCubeit(registry.entities);
         Biome      .registerCubeitBiomes(registry.biomes);
         
-        for (final RegistryEntry<Item> entry : registry.items)
+        for (final RegistryEntry<GameItem> entry : registry.items)
         {
-        	final Item item = entry.getValue();
+        	final GameItem item = entry.getValue();
 
         	if (item instanceof IDispensable)
         	{
@@ -166,11 +225,11 @@ public class Cvm
         	}
         }
         
-        for (final RegistryEntry<Block> entry : registry.blocks)
+        for (final RegistryEntry<GameBlock> entry : registry.blocks)
         {
-        	final Block block = entry.getValue();
+        	final GameBlock block = entry.getValue();
         	
-        	if (block instanceof IItemBlockProvider && block instanceof IDispensable)
+        	if (block.getItemBlock() != null && block instanceof IDispensable)
         	{
         		final IDispensable dispensable = (IDispensable) block;
         		final Item         itemBlock   = Item.getItemFromBlock(block);

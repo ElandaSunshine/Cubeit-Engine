@@ -11,7 +11,7 @@ public class GameNotFoundException extends RuntimeException
 		super("No game directory was specified.");
 	}
 	
-	public GameNotFoundException(String path)
+	public GameNotFoundException(final String path)
 	{
 		super("Could not find any game on the specified path: " + path);
 	}

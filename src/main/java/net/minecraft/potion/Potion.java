@@ -19,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.RegistryNamespaced;
+import xyz.elandasunshine.capi.game.GameInfo;
 import xyz.elandasunshine.capi.registry.Registry;
 import xyz.elandasunshine.capi.registry.RegistryEntry;
 import xyz.elandasunshine.capi.target.TargetSide;
@@ -401,7 +402,8 @@ public class Potion
         {
         	final RegistryEntry<Potion> potionEntry = registry.getEntryAt(i);
         	REGISTRY.register(ObjectRegistry.cubeitPotionStartId + i,
-        			          new ResourceLocation("cubeit", potionEntry.getKey()), potionEntry.getValue());
+        			          new ResourceLocation(GameInfo.get().gameId, potionEntry.getKey()),
+        			          					   potionEntry.getValue());
         }
     }
 }
