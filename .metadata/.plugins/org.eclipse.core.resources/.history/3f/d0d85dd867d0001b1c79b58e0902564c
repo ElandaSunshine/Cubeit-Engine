@@ -1,5 +1,0 @@
-package xyz.elandasunshine.capi.target;
-
-public enum VmTarget {
-
-}

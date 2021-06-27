@@ -1,7 +1,0 @@
-package net.minecraft.entity;
-
-public interface IEntityEggProvider
-{
-	int getPrimaryEggColor();
-	int getSecondaryEggColor();
-}

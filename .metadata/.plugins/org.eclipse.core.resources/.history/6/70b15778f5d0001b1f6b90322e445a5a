@@ -1,5 +1,0 @@
-package net.minecraft.enchantment;
-
-public abstract class Enchantment {
-
-}

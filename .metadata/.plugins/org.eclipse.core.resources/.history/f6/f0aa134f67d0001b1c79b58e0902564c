@@ -1,8 +1,0 @@
-package xyz.elandasunshine.capi.target;
-
-import xyz.elandasunshine.cvm.ITargetManager;
-
-public @interface TargetSide
-{
-	ITargetManager.VmTarget target;
-}
